@@ -55,7 +55,15 @@ const loginUser = async (req, res = response) => {
 }
 
 const renewToken = async (req, res = response) => {
-    res.json({ ok: true, message: 'Renewed', uid: req.uid })
+    const id = req.uid
+    try {
+        const user = await User.findById(id)
+        const token = await generateJWT(id)
+        res.json({ ok: true, message: 'Renewed', user, token })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ ok: false, message: 'Error with server' })
+    }
 }
 
 module.exports = {
