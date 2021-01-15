@@ -2,6 +2,7 @@ const { response } = require("express")
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 const { generateJWT } = require('../helpers/jwt')
+const router = require("../routes/auth")
 
 const createUser = async (req, res = response) => {
     const { email, password } = req.body
@@ -53,6 +54,10 @@ const loginUser = async (req, res = response) => {
     }
 }
 
+const renewToken = async (req, res = response) => {
+    res.json({ ok: true, message: 'Renewed', uid: req.uid })
+}
+
 module.exports = {
-    createUser, loginUser
+    createUser, loginUser, renewToken
 }

@@ -1,9 +1,9 @@
 ///Path: api/login
-
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { createUser, loginUser } = require('../controllers/auth')
+const { createUser, loginUser, renewToken } = require('../controllers/auth');
+const { validateJWT } = require('../middlewares/validate_jwt');
 const { validateCampos } = require('../middlewares/validate_res')
 
 const router = Router();
@@ -22,5 +22,7 @@ router.post('/', [
     check('password', 'La contraseña es obligatoria').not().isEmpty(),
     validateCampos,
 ], loginUser)
+
+router.get('/renew', validateJWT, renewToken);
 
 module.exports = router
