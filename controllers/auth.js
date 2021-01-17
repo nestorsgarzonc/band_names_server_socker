@@ -45,7 +45,7 @@ const loginUser = async (req, res = response) => {
         res.json({
             ok: true,
             message: 'User logged',
-            userDB,
+            user:userDB,
             token
         })
     } catch (error) {
