@@ -3,7 +3,7 @@ const { checkJWTSocket } = require('../helpers/jwt');
 const { connectedUser, disconnectedUser } = require('../controllers/socket');
 
 // Mensajes de Sockets
-io.on('connection', async (client) => {
+io.on('connection', (client) => {
     console.log('Client connected');
     console.log(client.handshake.headers['x-token']);
     const [isValid, uid] = checkJWTSocket(client.handshake.headers['x-token'])
@@ -11,10 +11,10 @@ io.on('connection', async (client) => {
         return client.disconnect();
     }
 
-    await connectedUser(uid)
+    connectedUser(uid)
 
     client.on('disconnect', () => {
         console.log('Client disconnected');
-        await disconnectedUser(uid)
+        disconnectedUser(uid)
     });
 });
