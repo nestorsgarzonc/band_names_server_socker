@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SocketServer</title>
 </head>
+
 <body>
     <h1>Acceso denegado</h1>
     <script src="socket.io/socket.io.js"></script>
     <script>
-        var socket = io();
-        socket.on('connect', function() {
+        var socket = io({
+            transportOptions: {
+                polling: {
+                    extraHeaders: {
+                        'x-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MDAwNWQ4N2QyNzMxNjNiZjA5NmY0MDUiLCJpYXQiOjE2MTA5ODQ2MDUsImV4cCI6MTYxMTA3MTAwNX0.2fgnDIlsUrDnI4UYTuEQU8ltdzbxA_a6FtIbSwyXafc'
+                    }
+                }
+            }
+        });
+        socket.on('connect', function () {
             console.log('Conectado al servidor')
         });
-        socket.on('disconnect', function() {
+        socket.on('disconnect', function () {
             console.log('Perdimos comunicación con el servidor');
         });
-        socket.emit('mensaje', { nombre: 'Fernando' } );
-        socket.on('nuevo-mensaje', function( payload ){
-            console.log('Escuhando:', payload );
+        socket.emit('mensaje', { nombre: 'Fernando' });
+        socket.on('nuevo-mensaje', function (payload) {
+            console.log('Escuhando:', payload);
         });
-        socket.on('active-bands', function( bands ){
+        socket.on('active-bands', function (bands) {
             console.clear();
-            console.table( bands );
+            console.table(bands);
         });
     </script>
 </body>
+
 </html>
