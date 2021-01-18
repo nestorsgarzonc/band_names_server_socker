@@ -1,19 +1,20 @@
 const { io } = require('../index');
-const Bands = require('../models/bands');
-const Band = require('../models/band');
-
-const bands = new Bands();
-
-bands.addBand(new Band('Breaking Benjamin'));
-bands.addBand(new Band('Bon Jovi'));
-bands.addBand(new Band('Héroes del Silencio'));
-bands.addBand(new Band('Metallica'));
+const { checkJWTSocket } = require('../helpers/jwt');
+const { connectedUser, disconnectedUser } = require('../controllers/socket');
 
 // Mensajes de Sockets
-io.on('connection', client => {
+io.on('connection', async (client) => {
     console.log('Client connected');
+    console.log(client.handshake.headers['x-token']);
+    const [isValid, uid] = checkJWTSocket(client.handshake.headers['x-token'])
+    if (!isValid) {
+        return client.disconnect();
+    }
+
+    await connectedUser(uid)
 
     client.on('disconnect', () => {
         console.log('Client disconnected');
+        await disconnectedUser(uid)
     });
 });
