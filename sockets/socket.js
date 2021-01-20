@@ -12,9 +12,11 @@ io.on('connection', (client) => {
     }
 
     connectedUser(uid)
+
     client.join(uid)
     client.on('personal-message', (payload) => {
         console.log(payload);
+        io.to(payload.to).emit('personal-message', payload)
     })
     client.on('disconnect', () => {
         console.log('Client disconnected');
