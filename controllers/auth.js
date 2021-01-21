@@ -10,7 +10,7 @@ const createUser = async (req, res = response) => {
         const emailExists = await User.findOne({ email })
         if (emailExists) {
             return res.status(400).json({ ok: false, message: 'El correo ya esta registrado' })
-        }
+        } 
         const user = new User(req.body);
         const salt = bcrypt.genSaltSync()
         user.password = bcrypt.hashSync(password, salt)
